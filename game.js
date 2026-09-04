@@ -18,9 +18,9 @@
   const levels = [
     {lv:1,min:0,max:5,title:'長照新手村',img:'assets/lv1.webp',joke:'今天先不要逞強，活著回到新手村也算一種能力。'},
     {lv:2,min:6,max:8,title:'開始有點會',img:'assets/lv2.webp',joke:'手忙腳亂歸手忙腳亂，但至少已經知道哪個火要先滅。'},
-    {lv:3,min:9,max:11,title:'多工求生者',img:'assets/lv3.webp',joke:'電話、訊息、紀錄一起來，你已經不會立刻靈魂出竅了。'},
-    {lv:4,min:12,max:14,title:'長照老江湖',img:'assets/lv4.webp',joke:'不是你太厲害，是這些情境你真的看過太多次了。'},
-    {lv:5,min:15,max:16,title:'長照傳奇王',img:'assets/lv5.webp',joke:'皇冠先戴好。今天魔王看到你，可能比較想自己請假。'}
+    {lv:3,min:9,max:11,title:'多工求生者',img:'assets/lv3.png',joke:'電話、訊息、紀錄一起來，你已經不會立刻靈魂出竅了。'},
+    {lv:4,min:12,max:14,title:'長照老江湖',img:'assets/lv4.png',joke:'不是你太厲害，是這些情境你真的看過太多次了。'},
+    {lv:5,min:15,max:16,title:'長照傳奇王',img:'assets/lv5.png',joke:'皇冠先戴好。今天魔王看到你，可能比較想自己請假。'}
   ];
 
   const shuffle = (arr) => {
@@ -206,10 +206,10 @@
     const ctx=canvas.getContext('2d');
     const score=totalCorrect();
     const lv=levelFor(score);
-    const bossSrc=state.bossCorrect===3?'assets/boss-win.webp':state.bossCorrect>0?'assets/boss-draw.webp':'assets/boss-lose.webp';
+    const bossSrc=state.bossCorrect===3?'assets/boss-win.png':state.bossCorrect>0?'assets/boss-draw.webp':'assets/boss-lose.png';
     $('generateBtn').disabled=true;
     $('generateBtn').textContent='生成中…';
-    $('shareNote').textContent='正在把這局戰績拼進你的分享圖…';
+    $('shareNote').textContent='正在生成你的長照求生戰績…';
 
     try{
       const [template,character,boss,qr] = await Promise.all([
@@ -218,73 +218,69 @@
       ctx.clearRect(0,0,canvas.width,canvas.height);
       fitImage(ctx,template,0,0,1080,1350,'cover');
 
-      // 頂部遊戲名稱
+      const navy='#263947', orange='#c95236', brown='#654b3d', muted='#8b6c58', cream='rgba(255,250,241,.92)';
+
+      // 品牌標題：保留大量留白，不做報表框。
       ctx.textAlign='center';
       ctx.fillStyle='#fff9ed';
-      ctx.font='900 66px "Microsoft JhengHei","PingFang TC",sans-serif';
-      ctx.fillText('長照求生王',540,115);
-      ctx.font='700 22px Arial,sans-serif';
-      ctx.fillText('LONG-TERM CARE SURVIVAL',540,150);
+      ctx.font='900 62px "Microsoft JhengHei","PingFang TC",sans-serif';
+      ctx.fillText('長照求生王',540,112);
+      ctx.font='700 19px Arial,sans-serif';
+      ctx.fillText('LONG-TERM CARE SURVIVAL',540,144);
 
-      // 角色圖框
-      roundedRect(ctx,115,225,390,500,34,'rgba(255,250,241,.92)','#e3b67d');
-      ctx.save();
-      ctx.beginPath();ctx.roundRect(127,237,366,476,25);ctx.clip();
-      fitImage(ctx,character,127,237,366,476,'cover');
-      ctx.restore();
+      // 等級像貼紙放在右上，不與角色搶視覺。
+      roundedRect(ctx,665,190,300,92,46,'rgba(255,250,241,.93)','#d8a16f');
+      ctx.fillStyle=navy; ctx.textAlign='center';
+      ctx.font='900 29px "Microsoft JhengHei","PingFang TC",sans-serif';
+      ctx.fillText(`Lv.${lv.lv}  ${lv.title}`,815,247);
 
-      // 等級稱號與分數
-      ctx.textAlign='left';
-      ctx.fillStyle='#263947';
-      ctx.font='900 32px "Microsoft JhengHei","PingFang TC",sans-serif';
-      ctx.fillText(`Lv.${lv.lv}  ${lv.title}`,555,300);
-      ctx.fillStyle='#c95236';
-      ctx.font='900 118px Arial,sans-serif';
-      ctx.fillText(String(score),555,445);
-      ctx.fillStyle='#263947';
-      ctx.font='900 39px Arial,sans-serif';
-      ctx.fillText('/ 16',715,445);
-      ctx.fillStyle='#8b6c58';
-      ctx.font='800 24px "Microsoft JhengHei","PingFang TC",sans-serif';
-      ctx.fillText('總成績',558,490);
+      // 角色是整張分享圖的主角：不再塞進相框。
+      // 依素材比例 contain，讓人物完整、背景透明。
+      fitImage(ctx,character,55,170,650,735,'contain');
 
-      // 吐槽泡泡
-      roundedRect(ctx,545,535,420,190,26,'rgba(255,248,234,.94)','#ce9d72');
-      ctx.fillStyle='#5d4638';
-      ctx.font='800 27px "Microsoft JhengHei","PingFang TC",sans-serif';
-      wrapText(ctx,resultJoke(score,state.bossCorrect),575,588,360,44,3);
-
-      // 品牌與 QR
-      ctx.fillStyle='#263947';
-      ctx.font='900 29px Arial,sans-serif';
-      ctx.fillText('@longcare.notes',120,990);
-      ctx.font='700 20px "Microsoft JhengHei","PingFang TC",sans-serif';
-      ctx.fillStyle='#795f4d';
-      ctx.fillText('掃碼挑戰你的長照求生力',120,1024);
-      if(qr) ctx.drawImage(qr,120,1045,170,170);
-      else {
-        roundedRect(ctx,120,1045,170,170,10,'#fffaf1','#8c755f');
-        ctx.fillStyle='#263947';ctx.font='800 18px Arial,sans-serif';ctx.fillText('QR CODE',150,1135);
-      }
-
-      // 魔王成績（右下小小的）
-      roundedRect(ctx,690,950,260,280,27,'rgba(255,248,234,.95)','#d9aa7d');
+      // 總分做第二視覺焦點。
       ctx.textAlign='center';
-      ctx.fillStyle='#6f5140';
-      ctx.font='900 23px "Microsoft JhengHei","PingFang TC",sans-serif';
-      ctx.fillText('魔王成績',820,990);
-      ctx.save();ctx.beginPath();ctx.roundRect(720,1010,200,145,18);ctx.clip();fitImage(ctx,boss,720,1010,200,145,'contain');ctx.restore();
-      ctx.fillStyle='#c95236';
-      ctx.font='900 38px Arial,sans-serif';
-      ctx.fillText(`${state.bossCorrect} / 3`,820,1200);
+      ctx.fillStyle=orange;
+      ctx.font='900 122px Arial,sans-serif';
+      ctx.fillText(String(score),820,445);
+      const scoreW=ctx.measureText(String(score)).width;
+      ctx.textAlign='left'; ctx.fillStyle=navy;
+      ctx.font='900 39px Arial,sans-serif';
+      ctx.fillText('/ 16',820+scoreW/2+18,445);
+      ctx.textAlign='center'; ctx.fillStyle=muted;
+      ctx.font='800 22px "Microsoft JhengHei","PingFang TC",sans-serif';
+      ctx.fillText('總成績',820,482);
 
-      // 小品牌字
-      ctx.textAlign='center';ctx.fillStyle='#7c6657';ctx.font='700 18px "Microsoft JhengHei","PingFang TC",sans-serif';
-      ctx.fillText('LTC 長照研究室 · Long-term Care Lab',540,1290);
+      // 一句結果吐槽：做成大對話泡泡，是第三視覺焦點。
+      roundedRect(ctx,500,535,475,245,34,cream,'#d5a174');
+      ctx.fillStyle=brown; ctx.textAlign='left';
+      ctx.font='900 30px "Microsoft JhengHei","PingFang TC",sans-serif';
+      wrapText(ctx,resultJoke(score,state.bossCorrect),545,600,385,48,4);
+
+      // 底部品牌 + 小 QR，不再讓 QR 搶戲。
+      ctx.textAlign='left'; ctx.fillStyle=navy;
+      ctx.font='900 28px Arial,sans-serif';
+      ctx.fillText('@longcare.notes',105,1115);
+      ctx.fillStyle=muted; ctx.font='700 18px "Microsoft JhengHei","PingFang TC",sans-serif';
+      ctx.fillText('掃碼換你挑戰',105,1148);
+      if(qr) ctx.drawImage(qr,105,1170,115,115);
+      else { roundedRect(ctx,105,1170,115,115,10,'#fffaf1','#8c755f'); }
+
+      // 魔王是右下角彩蛋：沒有卡片、沒有方框。
+      fitImage(ctx,boss,745,970,245,235,'contain');
+      ctx.textAlign='center'; ctx.fillStyle=brown;
+      ctx.font='900 21px "Microsoft JhengHei","PingFang TC",sans-serif';
+      ctx.fillText('魔王成績',865,1212);
+      ctx.fillStyle=orange; ctx.font='900 34px Arial,sans-serif';
+      ctx.fillText(`${state.bossCorrect} / 3`,865,1252);
+
+      ctx.textAlign='center'; ctx.fillStyle='#7c6657';
+      ctx.font='700 16px "Microsoft JhengHei","PingFang TC",sans-serif';
+      ctx.fillText('LTC 長照研究室 · Long-term Care Lab',540,1310);
 
       shareBlob = await new Promise(resolve=>canvas.toBlob(resolve,'image/png',1));
       $('sharePanel').hidden=false;
-      $('shareNote').textContent='完成。這張就是玩家可以分享出去的個人戰績圖。';
+      $('shareNote').textContent='完成。這次改成海報式戰績卡：角色是主角，魔王是右下角彩蛋。';
       $('sharePanel').scrollIntoView({behavior:'smooth',block:'start'});
     } catch(err){
       console.error(err);
