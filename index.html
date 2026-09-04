@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#c65336">
+  <meta name="description" content="長照研究室｜長照求生王：長照第一線情境闖關小遊戲">
+  <title>長照求生王｜長照研究室</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="ambient ambient-a"></div><div class="ambient ambient-b"></div>
+  <header class="site-header">
+    <a class="brand" href="#" aria-label="長照研究室首頁" id="brandHome">
+      <span class="brand-mark"><span class="brand-l">L</span><span class="brand-t">T</span><span class="brand-c">C</span><span class="brand-heart">♥</span></span>
+      <span class="brand-copy"><strong>長照研究室</strong><small>Long-term Care Lab</small></span>
+    </a>
+    <div class="header-pill">長照人的生存測驗</div>
+  </header>
+
+  <main class="app" id="app">
+    <section class="screen start-screen active" id="startScreen" aria-labelledby="gameTitle">
+      <div class="hero-card paper-frame">
+        <div class="hero-copy">
+          <div class="eyebrow">LTC SURVIVAL GAME</div>
+          <h1 id="gameTitle"><span>長照</span><br>求生王</h1>
+          <p class="hero-sub">你以為今天只是普通上班日？<br>電話、異動、家屬、風險與魔王題已經排隊等你。</p>
+          <div class="hero-badges">
+            <span>🎯 每局 10 題</span><span>👹 魔王 3 題</span><span>🔀 選項隨機</span>
+          </div>
+          <button class="primary-btn start-btn" id="startBtn"><span>開始今天的求生</span><b>→</b></button>
+          <button class="text-btn" id="howBtn">遊戲怎麼玩？</button>
+        </div>
+        <div class="hero-art">
+          <div class="level-stamp">START<br><b>Lv.1</b></div>
+          <img src="assets/lv1.webp" alt="Lv.1 慌張冒汗的研編角色">
+          <div class="speech">今天應該<br>不會太忙吧？</div>
+        </div>
+      </div>
+      <div class="start-bottom">
+        <div class="mini-card"><b>60</b><span>一般題庫</span></div>
+        <div class="mini-card"><b>15</b><span>魔王題庫</span></div>
+        <div class="mini-card"><b>5</b><span>求生等級</span></div>
+      </div>
+    </section>
+
+    <section class="screen game-screen" id="gameScreen" aria-live="polite">
+      <div class="game-topbar">
+        <div class="stage-block"><span id="stageKicker">今日任務</span><strong id="stageTitle">一般求生關</strong></div>
+        <div class="score-block"><small>SCORE</small><strong id="scoreText">0</strong></div>
+      </div>
+      <div class="progress-wrap" aria-label="答題進度">
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="progress-meta"><span id="questionCounter">01 / 10</span><span id="streakText">連勝 0</span></div>
+      </div>
+
+      <div class="game-layout">
+        <aside class="character-panel">
+          <div class="level-chip" id="levelChip">Lv.1</div>
+          <img id="levelImage" src="assets/lv1.webp" alt="目前求生等級角色">
+          <div class="level-copy"><small>目前狀態</small><strong id="levelName">剛進戰場</strong><span id="levelFlavor">文件抱緊，先不要慌。</span></div>
+          <div class="xp-box"><div><span>XP</span><b id="xpText">0</b></div><div class="xp-track"><i id="xpFill"></i></div></div>
+        </aside>
+
+        <section class="question-card" id="questionCard">
+          <div class="question-meta"><span class="category-chip" id="categoryChip">分類</span><span class="difficulty-chip" id="difficultyChip">中</span></div>
+          <div class="question-no" id="questionId">A01</div>
+          <h2 id="questionTitle">題目名稱</h2>
+          <p class="question-text" id="questionText"></p>
+          <div class="answers" id="answers"></div>
+          <div class="feedback" id="feedback" hidden>
+            <div class="feedback-head"><span id="feedbackIcon">✓</span><strong id="feedbackTitle"></strong></div>
+            <p id="feedbackShort"></p>
+            <div class="explanation"><b>研編解析</b><p id="explanationText"></p></div>
+          </div>
+          <button class="primary-btn next-btn" id="nextBtn" hidden><span>下一題</span><b>→</b></button>
+        </section>
+      </div>
+    </section>
+
+    <section class="screen boss-intro" id="bossIntro">
+      <div class="boss-card">
+        <div class="boss-crown">♛</div>
+        <p>一般求生關完成</p>
+        <h2>魔王上線</h2>
+        <div class="boss-warning">接下來 3 題都是綜合情境。<br>沒有送分題，也沒有固定答案位置。</div>
+        <div class="boss-stats"><span>3 題全對<strong>擊敗魔王</strong></span><span>1–2 題<strong>打成平手</strong></span><span>0 題<strong>沙發已備妥</strong></span></div>
+        <button class="boss-btn" id="bossStartBtn">進入魔王關</button>
+      </div>
+    </section>
+
+    <section class="screen result-screen" id="resultScreen">
+      <div class="result-card paper-frame">
+        <div class="result-copy">
+          <div class="eyebrow">TODAY'S SURVIVAL REPORT</div>
+          <div class="result-rank" id="resultRank">Lv.5</div>
+          <h2 id="resultTitle">今天成功下班！</h2>
+          <p id="resultDesc"></p>
+          <div class="result-grid">
+            <div><small>一般題</small><b id="normalScore">0 / 10</b></div>
+            <div><small>魔王題</small><b id="bossScore">0 / 3</b></div>
+            <div><small>最高連勝</small><b id="bestStreak">0</b></div>
+          </div>
+          <div class="result-actions"><button class="primary-btn" id="restartBtn"><span>再求生一次</span><b>↻</b></button><button class="secondary-btn" id="shareBtn">分享戰績</button></div>
+          <p class="share-status" id="shareStatus" aria-live="polite"></p>
+        </div>
+        <div class="result-art"><div class="result-burst" id="resultBurst">BOSS<br>RESULT</div><img id="resultImage" src="assets/boss-win.webp" alt="魔王關結果插圖"></div>
+      </div>
+      <div class="footer-note">本遊戲為長照研究室之情境學習內容，實務處理仍應依現行法規、地方規範及各單位作業流程為準。</div>
+    </section>
+  </main>
+
+  <dialog id="howDialog">
+    <button class="dialog-close" id="closeHow" aria-label="關閉">×</button>
+    <div class="dialog-tag">HOW TO SURVIVE</div><h2>今天的求生規則</h2>
+    <ol><li><b>一般關 10 題</b><span>題目從不同主題與難度混抽，答對累積 XP。</span></li><li><b>角色會升級</b><span>依一般題答對數從 Lv.1 一路進化到 Lv.5。</span></li><li><b>最後 3 題魔王題</b><span>選項每局重新洗牌，不能靠背答案位置。</span></li></ol>
+    <p>答錯沒關係，解析會立刻出現。目標不是背題庫，是看你能不能在情境裡抓到風險與處理優先順序。</p>
+  </dialog>
+
+  <div class="levelup-overlay" id="levelUpOverlay" hidden><div class="levelup-card"><span>LEVEL UP!</span><img id="levelUpImage" src="assets/lv2.webp" alt="升級角色"><strong id="levelUpTitle">Lv.2</strong><p id="levelUpText"></p><button id="levelUpContinue">繼續求生</button></div></div>
+
+  <script src="game-data.js"></script><script src="game.js"></script>
+</body>
+</html>
