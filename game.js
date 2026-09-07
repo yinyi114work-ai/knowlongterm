@@ -382,19 +382,29 @@
       fittedFont(ctx, title, 560, 43);
       ctx.lineWidth = 7;
       ctx.strokeStyle = '#f7d97e';
-      ctx.strokeText(title, 430, 974);
+      ctx.strokeText(title, 438, 974);
       ctx.fillStyle = ink;
-      ctx.fillText(title, 430, 974);
+      ctx.fillText(title, 438, 974);
 
-      ctx.font = '900 24px "PingFang TC","Microsoft JhengHei",sans-serif';
-      ctx.fillStyle = ink;
-      ctx.fillText('總成績', 303, 1030);
-      ctx.font = '900 56px Arial,sans-serif';
-      ctx.fillStyle = orange;
-      ctx.fillText(String(score), 435, 1026);
-      ctx.font = '900 28px Arial,sans-serif';
-      ctx.fillStyle = ink;
-      ctx.fillText('/ 16 題', 525, 1030);
+      const scoreParts = [
+        { text: '總成績', font: '900 24px "PingFang TC","Microsoft JhengHei",sans-serif', color: ink, offset: 0 },
+        { text: String(score), font: '900 56px Arial,sans-serif', color: orange, offset: -4 },
+        { text: '/ 16 題', font: '900 28px Arial,sans-serif', color: ink, offset: 0 }
+      ];
+      const scoreGap = 13;
+      const scoreWidths = scoreParts.map((part) => {
+        ctx.font = part.font;
+        return ctx.measureText(part.text).width;
+      });
+      const scoreRowWidth = scoreWidths.reduce((sum, width) => sum + width, 0) + scoreGap * (scoreParts.length - 1);
+      let scoreX = 438 - scoreRowWidth / 2;
+      ctx.textAlign = 'left';
+      scoreParts.forEach((part, index) => {
+        ctx.font = part.font;
+        ctx.fillStyle = part.color;
+        ctx.fillText(part.text, scoreX, 1030 + part.offset);
+        scoreX += scoreWidths[index] + scoreGap;
+      });
 
       const rows = [
         { label: '安全判斷', percent: stats['安全判斷'].percent },
@@ -428,15 +438,12 @@
       ctx.font = '900 21px "PingFang TC","Microsoft JhengHei",sans-serif';
       ctx.fillStyle = ink;
       ctx.fillText(battle.label, 823, 1140);
-      ctx.font = '900 42px Arial,sans-serif';
+      ctx.font = '900 35px "PingFang TC","Microsoft JhengHei",sans-serif';
       ctx.fillStyle = orange;
-      ctx.fillText(`${state.bossCorrect} / 3`, 823, 1194);
-      ctx.font = '800 18px "PingFang TC","Microsoft JhengHei",sans-serif';
-      ctx.fillStyle = ink;
-      ctx.fillText('題', 874, 1194);
+      ctx.fillText(`${state.bossCorrect} / 3 題`, 823, 1194);
 
-      if (qr) ctx.drawImage(qr, 718, 1310, 172, 172);
-      else roundedRect(ctx, 718, 1310, 172, 172, 12, '#fffdf8');
+      if (qr) ctx.drawImage(qr, 722, 1316, 160, 160);
+      else roundedRect(ctx, 722, 1316, 160, 160, 12, '#fffdf8');
 
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       shareBlob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png', 1));
@@ -493,11 +500,6 @@
     window.setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
   }
 
-  function shareToLine() {
-    const text = state ? shareCopy() : `來玩《長照求生王》：16 題測你的長照求生力，最後還有魔王題。\n${GAME_URL}`;
-    window.open(`https://line.me/R/msg/text/?${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
-  }
-
   async function shareChallenge() {
     const text = '來玩《長照求生王》：16 題測你的長照求生力，最後還有魔王題。';
     try {
@@ -521,8 +523,7 @@
   $('generateBtn').addEventListener('click', generateShareCard);
   $('shareImageBtn').addEventListener('click', shareImage);
   $('downloadBtn').addEventListener('click', downloadImage);
-  $('lineShareBtn').addEventListener('click', shareToLine);
-  $('lineShareResultBtn').addEventListener('click', shareToLine);
+  $('resultShareBtn').addEventListener('click', shareImage);
   $('challengeShareBtn').addEventListener('click', shareChallenge);
   $('homeLink').addEventListener('click', (event) => {
     event.preventDefault();
