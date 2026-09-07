@@ -418,19 +418,25 @@
         ctx.font = '900 20px "PingFang TC","Microsoft JhengHei",sans-serif';
         ctx.fillStyle = ink;
         ctx.fillText(row.label, 171, y);
-        roundedRect(ctx, 307, y - 10, 354 * (row.percent / 100), 20, 10, gold);
+        // 底圖右側留給百分比，進度條最多只填到深色軌道末端。
+        roundedRect(ctx, 307, y - 10, 305 * (row.percent / 100), 20, 10, gold);
         ctx.textAlign = 'right';
         ctx.font = '900 21px Arial,sans-serif';
         ctx.fillStyle = ink;
         ctx.fillText(`${row.percent}%`, 696, y);
       });
 
+      // 便條紙本身有約 2 度傾斜，文字跟著紙張角度排版。
+      ctx.save();
+      ctx.translate(430, 1360);
+      ctx.rotate(-2 * Math.PI / 180);
       ctx.textAlign = 'left';
       ctx.textBaseline = 'alphabetic';
-      ctx.font = '800 21px "PingFang TC","Microsoft JhengHei",sans-serif';
+      ctx.font = '800 23px "PingFang TC","Microsoft JhengHei",sans-serif';
       ctx.fillStyle = ink;
-      const jokeLines = wrapLines(ctx, resultJoke(score, state.bossCorrect), 470, 3);
-      jokeLines.forEach((line, index) => ctx.fillText(line, 190, 1340 + index * 34));
+      const jokeLines = wrapLines(ctx, resultJoke(score, state.bossCorrect), 460, 3);
+      jokeLines.forEach((line, index) => ctx.fillText(line, -230, -4 + index * 38));
+      ctx.restore();
 
       fitImage(ctx, boss, 744, 940, 170, 170);
       ctx.textAlign = 'center';
@@ -442,8 +448,9 @@
       ctx.fillStyle = orange;
       ctx.fillText(`${state.bossCorrect} / 3 題`, 823, 1194);
 
-      if (qr) ctx.drawImage(qr, 722, 1316, 160, 160);
-      else roundedRect(ctx, 722, 1316, 160, 160, 12, '#fffdf8');
+      // QR 保留一致的四邊留白，置中於底圖預留的白色框。
+      if (qr) ctx.drawImage(qr, 716, 1320, 148, 148);
+      else roundedRect(ctx, 716, 1320, 148, 148, 12, '#fffdf8');
 
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       shareBlob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png', 1));
