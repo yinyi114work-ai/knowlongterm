@@ -4,84 +4,69 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#fff8ee">
-  <meta name="description" content="長照研究室｜長照求生王：16題長照情境挑戰，完成後生成專屬分享戰績圖。">
+  <meta name="description" content="長照研究室｜長照求生王：16 題長照情境挑戰，完成後生成專屬 9:16 戰績圖。">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="og:title" content="長照求生王｜長照研究室">
+  <meta property="og:description" content="16 個長照情境，你能活到第幾關？13 題一般關＋3 題魔王關。">
+  <meta property="og:url" content="https://yinyi114work-ai.github.io/knowlongterm/">
+  <meta property="og:image" content="https://yinyi114work-ai.github.io/knowlongterm/assets/cover.png">
+  <meta name="twitter:card" content="summary_large_image">
   <title>長照求生王｜長照研究室</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style-v4.css">
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="#" id="homeLink" aria-label="回到長照求生王首頁">
-      <span class="brand-ltc">LTC</span>
-      <span class="brand-text"><b>長照研究室</b><small>Long-term Care Lab</small></span>
+    <a href="#" id="homeLink" aria-label="回到長照求生王首頁">
+      <b>LTC｜長照研究室</b><small>Long-term Care Lab</small>
     </a>
-    <span class="header-note">@longcare.notes</span>
+    <span>@longcare.notes</span>
   </header>
-
   <main class="app" id="app">
     <section class="screen active" id="startScreen">
-      <div class="intro-card">
-        <div class="intro-copy">
-          <span class="kicker">LONG-TERM CARE SURVIVAL QUIZ</span>
-          <h1>長照<br><em>求生王</em></h1>
-          <p class="lead">16 個情境，看看你的長照求生雷達能撐到哪一級。</p>
-          <div class="intro-meta" aria-label="遊戲資訊">
-            <span>13 題一般關</span><span>＋</span><span>3 題魔王關</span>
-          </div>
-          <button class="primary-btn start-btn" id="startBtn" type="button">開始挑戰 <span>→</span></button>
-          <p class="tiny">不用登入、不記名，完成後可生成自己的 IG／Threads 戰績圖。</p>
-        </div>
-        <div class="intro-art" aria-hidden="true">
-          <div class="art-sticker sticker-a">今天<br>能下班嗎？</div>
-          <img src="assets/lv3.png" alt="">
-          <div class="art-sticker sticker-b">先活過<br>這 16 題</div>
-        </div>
-      </div>
-      <div class="steps">
-        <div><b>01</b><span>憑直覺作答</span></div>
-        <div><b>02</b><span>最後挑戰魔王</span></div>
-        <div><b>03</b><span>生成你的分享圖</span></div>
-      </div>
+      <button class="cover-button" id="startBtn" type="button" disabled aria-label="開始長照求生王挑戰">
+        <img src="assets/cover.png" alt="長照求生王，16 個長照情境挑戰，13 題一般關與 3 題魔王關">
+        <span class="loading-label" id="loadingLabel">題庫載入中…</span>
+      </button>
+      <p class="privacy-note">不用登入、不記名；完成後可生成自己的限時動態戰績圖。</p>
     </section>
-
     <section class="screen" id="quizScreen" aria-live="polite">
       <div class="quiz-shell">
         <div class="quiz-head">
-          <div>
-            <span class="kicker" id="stageLabel">SURVIVAL MISSION</span>
-            <strong id="stageName">長照求生題</strong>
-          </div>
+          <div><span class="kicker" id="stageLabel">SURVIVAL MISSION</span><strong id="stageName">長照求生題</strong></div>
           <div class="count"><b id="qNow">1</b><span>/ 16</span></div>
         </div>
         <div class="progress" aria-label="答題進度"><i id="progressBar"></i></div>
         <article class="question-card">
           <div class="chips"><span id="categoryChip">情境題</span><span id="difficultyChip">中</span></div>
-          <h2 id="questionTitle">題目載入中</h2>
+          <h1 id="questionTitle">題目載入中</h1>
           <p id="questionText"></p>
           <div class="answers" id="answers"></div>
           <p class="answer-hint" id="answerHint">選一個最符合你判斷的做法</p>
+          <div class="feedback" id="feedbackPanel" hidden>
+            <strong id="feedbackTitle"></strong>
+            <p id="feedbackText"></p>
+            <p class="explanation" id="explanationText"></p>
+            <button class="primary-btn" id="nextBtn" type="button">下一題 →</button>
+          </div>
         </article>
       </div>
     </section>
-
     <section class="screen" id="bossScreen">
       <div class="boss-transition">
         <span class="kicker">FINAL 3</span>
-        <div class="boss-pair">
-          <img src="assets/lv4.png" alt="研編準備挑戰魔王">
-          <strong>VS</strong>
-          <img src="assets/boss-draw.webp" alt="魔王">
-        </div>
-        <h2>魔王題出現了</h2>
+        <img src="assets/boss-average.png" alt="長照求生王魔王">
+        <h1>魔王題出現了</h1>
         <p>前面只是暖身。最後 3 題，會把幾個長照情境揉在一起。</p>
-        <button class="primary-btn" id="bossBtn" type="button">進入魔王關 <span>→</span></button>
+        <button class="primary-btn" id="bossBtn" type="button">進入魔王關 →</button>
       </div>
     </section>
-
     <section class="screen" id="resultScreen">
       <div class="result-layout">
         <div class="result-summary">
           <span class="kicker">SURVIVAL REPORT</span>
-          <h2 id="rankText">Lv.4 長照老江湖</h2>
+          <h1 id="rankText">Lv.4 長照老江湖</h1>
+          <h2 id="titleText">異常事件雷達王</h2>
           <div class="score-big"><b id="scoreBig">13</b><span>/ 16</span></div>
           <p class="result-joke" id="resultJoke"></p>
           <div class="score-row">
@@ -89,32 +74,30 @@
             <span>魔王題 <b id="bossScore">3 / 3</b></span>
           </div>
           <div class="result-actions">
-            <button class="primary-btn" id="generateBtn" type="button">生成我的分享圖</button>
-            <button class="outline-btn" id="challengeShareBtn" type="button">分享遊戲給朋友</button>
+            <button class="primary-btn" id="generateBtn" type="button">查看完整結果圖</button>
+            <button class="line-btn" id="lineShareBtn" type="button">LINE 分享結果＋網址</button>
+            <button class="outline-btn" id="challengeShareBtn" type="button">分享遊戲網址</button>
             <button class="text-btn" id="restartBtn" type="button">再玩一次</button>
           </div>
-          <p class="share-note" id="shareNote">分享圖會使用你這局的等級角色、總成績與魔王戰況。</p>
+          <p class="share-note" id="shareNote">結果圖會依你的等級、能力值、稱號與魔王戰況生成。</p>
         </div>
-
         <div class="share-panel" id="sharePanel" hidden>
           <div class="share-preview-wrap">
-            <canvas id="shareCanvas" width="1080" height="1350" aria-label="長照求生王分享圖預覽"></canvas>
+            <canvas id="shareCanvas" width="1080" height="1920" aria-label="長照求生王 9 比 16 分享圖預覽"></canvas>
           </div>
           <div class="share-actions">
-            <button class="primary-btn" id="shareImageBtn" type="button">分享圖片</button>
-            <button class="outline-btn" id="downloadBtn" type="button">下載 IG 圖</button>
+            <button class="primary-btn" id="shareImageBtn" type="button">分享完整結果圖</button>
+            <button class="line-btn" id="lineShareResultBtn" type="button">LINE 分享結果＋網址</button>
+            <button class="outline-btn" id="downloadBtn" type="button">下載 9:16 限動圖</button>
           </div>
-          <p class="tiny center">手機支援系統分享時，可從分享面板選擇 IG、Threads、LINE 等 App。</p>
+          <p class="tiny center">LINE 按鈕會分享挑戰文字與遊戲網址；圖片可先下載，再貼到 LINE、IG 或 Threads。</p>
         </div>
       </div>
       <div id="qrMaker" class="qr-maker" aria-hidden="true"></div>
     </section>
   </main>
-
   <footer>長照研究室 Long-term Care Lab · @longcare.notes</footer>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSQX0FslNhTDadL4O5SAGapGt4FodqL8My0mA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="game-data.js"></script>
   <script src="game.js"></script>
 </body>
 </html>
